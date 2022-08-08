@@ -3,8 +3,66 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
+
+#==================Classes=============#
+
+
+@dataclass
+class Salary:
+    """Class  for your gross salary and super
+
+    """
+    base:int
+    bonus:int
+    shares:int
+    super_:int
+    currency: str
+    gross:int = field(init = False)
+    tc:int = field(init = False)
+
+    def __post_init__(self):
+        self.tc = self.calc_tc()
+        self.gross = self.calc_gross()
+    
+    def calc_gross(self) -> int:
+        return self.base + self.bonus + self.shares
+    
+    def calc_tc(self) -> int:
+        return  self.calc_gross() + self.super_
+
+
+@dataclass
+class TaxTable:
+    pass
+
+@dataclass
+class Tax:
+    levy:float = field(init=False)
+    tax_table:TaxTable = field(init=False)
+
+
+@dataclass
+class Location:
+    country:str
+    state:str
+    cpi:float = field(init=False)
+    tax:Tax = field(init=False)
+
+    def _lookup_cpi(self):
+        pass
+
+    def _lookup_tax(self):
+        pass
+
+@dataclass
+class RealPay:
+    location:Location
+    salary:Salary
+
+
+
 #==================Functions===========#
-def convert_salary(salary:Salary, currency:) -> Salary:
+def convert_salary(salary:Salary, currency:str) -> Salary:
     """Converts salary to new currency
 
     Args:
@@ -27,51 +85,3 @@ def calculate_tax(gross:int, location:Location) -> float:
         float: tax payable
     """
     pass
-
-#==================Classes=============#
-@dataclass
-class RealPay:
-    location:Location
-    salary:Salary
-
-@dataclass
-class Salary:
-    """Class  for your gross salary and super
-
-    """
-    base:int
-    bonus:int
-    shares:int
-    super:int
-    currency: str
-    gross:int = field(init = False)
-    tc:int = field(init = False)
-
-    def __post__init__(self):
-        self.tc =_self.calc_tc()
-    
-    def _calc_gross(self):
-        return self.base + self.bonus + self.shares
-    
-    def _calc_tc(self):
-        return  self._calc_gross + self.super
-
-@dataclass
-class Location:
-    country:str
-    state:str
-    cpi:float = field(init=False)
-    tax:Tax = field(init=False)
-
-    def _lookup_cpi(self):
-        pass
-
-    def _lookup_tax(self):
-        pass
-
-@dataclass
-class Tax:
-    levy:float = field(init=False)
-    tax_table:TaxTable = field(init=False)
-
-
