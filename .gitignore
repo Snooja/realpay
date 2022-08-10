@@ -3,3 +3,6 @@
 
 # Pytest 
 __pyache__/*
+
+# Pipenv virtual environment
+Pipfile.lock
