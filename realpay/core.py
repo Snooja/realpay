@@ -2,6 +2,9 @@
 # Public Packages
 from dataclasses import dataclass, field
 from typing import Optional
+from datetime import date
+import pandas as pd
+import numpy as np
 
 
 #==================Classes=============#
@@ -30,33 +33,67 @@ class Salary:
     def calc_tc(self) -> int:
         return  self.calc_gross() + self.super_
 
-
 @dataclass
 class TaxTable:
-    pass
+    """Class for a specific tax table
+    """
+    raw:pd.DataFrame # raw tax table
+    table:pd.DataFrame = field(init=False)
+    min_col:str = 'min'
+    max_col:str = 'max'
+    rate_col:str = "rate"
+    inf_str:str = 'inf' # what to interpret as infini
+
+    def __post_init__(self):
+        self.table = self.clean_tax_table(self.raw)
+
+    def clean_tax_table(self, table:pd.DataFrame) -> pd.DataFrame:
+        df = table.copy()
+        #df = self._convert_inf_str(df = df)
+        df = self._clean_dtypes(df = df)
+        return(df)
+
+    def _clean_dtypes(self, df:pd.DataFrame) -> pd.DataFrame:
+        clean = df.copy()
+        clean.astype(
+            {
+                self.min_col: int,
+                self.max_col: int,
+                self.rate_col: float
+            }
+        )
+        return(clean)
+
+    def _convert_inf_str(self, df) -> pd.DataFrame:
+        converted = df.copy()
+        converted.replace(self.inf_str, np.inf)
+        return(converted)
+
+
 
 @dataclass
 class Tax:
+    """Object capturing tax rate for a location
+    """
     levy:float = field(init=False)
+    valid_from: date # date rates valid from
+    valid_to: date # date vrates valid until
+    country: str # ISO Alpha-3 country code
+    state: str # state code eg. WA for Western Australia
+    currency:str
     tax_table:TaxTable = field(init=False)
 
+    def __post_init__(self):
+        self.tax_table = self._prepare_tax_table(self.tax_table)
 
-@dataclass
-class Location:
-    country:str
-    state:str
-    cpi:float = field(init=False)
-    tax:Tax = field(init=False)
-
-    def _lookup_cpi(self):
+    def prepare_tax_table(self):
         pass
 
-    def _lookup_tax(self):
-        pass
 
 @dataclass
 class RealPay:
-    location:Location
+    country: str # ISO Alpha-3 country code
+    state: str # state code eg. WA for Western Australia
     salary:Salary
 
 
@@ -71,17 +108,5 @@ def convert_salary(salary:Salary, currency:str) -> Salary:
 
     Returns:
         Salary: In new currency
-    """
-    pass
-
-def calculate_tax(gross:int, location:Location) -> float:
-    """Calculates personal income tax payable
-
-    Args:
-        gross (int): gross yearly pay
-        location (Location): location object
-
-    Returns:
-        float: tax payable
     """
     pass

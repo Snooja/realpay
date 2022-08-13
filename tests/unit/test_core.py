@@ -3,7 +3,7 @@
 import pytest 
 
 # Internal Imports
-from realpay.core import Salary
+from realpay.core import Salary, TaxTable
 
 #==================Tests===============#
 class TestSalary:
@@ -44,3 +44,24 @@ class TestSalary:
         result = Salary(**input)
         assert  result.gross == expected.get('gross')
         assert  result.tc == expected.get('tc')
+
+class TestTaxTable:
+
+    @pytest.fixture
+    def raw_tax_table():
+        return pd.DataFrame(
+            {
+                'min': [0, 18201, 45001, 120001, 180001],
+                'max': [18200, 45000, 120000, 180000, np.inf],
+                'rate': [0, 0.19, 0.325, 0.37, 0.45]
+            }
+        )
+    
+    def test_clean_tax_table(self, raw_tax_table):
+        df = raw_tax_table
+        taxtable = TaxTable(raw = df)
+        #cleaned = taxtable.table
+
+       # assert cleaned['min'].dtype is int
+
+
