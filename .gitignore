@@ -2,7 +2,7 @@
 .venv/*
 
 # Pytest 
-__pycache__/*
+**/__pycache__/
 pytest.ini
 
 # Pipenv virtual environment
