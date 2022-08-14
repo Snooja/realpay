@@ -49,17 +49,17 @@ class TaxTable:
 
     def clean_tax_table(self, table:pd.DataFrame) -> pd.DataFrame:
         df = table.copy()
-        #df = self._convert_inf_str(df = df)
+        df = self._convert_inf_str(df = df)
         df = self._clean_dtypes(df = df)
         return(df)
 
     def _clean_dtypes(self, df:pd.DataFrame) -> pd.DataFrame:
         clean = df.copy()
-        clean.astype(
+        clean = clean.astype(
             {
-                self.min_col: int,
-                self.max_col: int,
-                self.rate_col: float
+                self.min_col: np.float64 ,
+                self.max_col: np.float64,
+                self.rate_col: np.float64
             }
         )
         return(clean)

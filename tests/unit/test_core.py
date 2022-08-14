@@ -2,6 +2,7 @@
 # Public Packages
 import pytest
 import pandas as pd
+import numpy as np
 
 # Internal Imports
 from realpay.core import Salary, TaxTable
@@ -63,6 +64,12 @@ class TestTaxTable:
         taxtable = TaxTable(raw = df)
         cleaned = taxtable.table
 
-        assert cleaned['min'].dtype is int
+        # test types
+        assert cleaned['min'].dtype == np.floating
+        assert cleaned['max'].dtype  == np.floating
+        assert cleaned['rate'].dtype  == np.floating
+
+        # test inf conversion
+        assert np.isinf(cleaned['max'].values).any()
 
 
