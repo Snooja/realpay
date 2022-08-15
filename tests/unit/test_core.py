@@ -62,14 +62,22 @@ class TestTaxTable:
     def test_clean_tax_table(self, raw_tax_table):
         df = raw_tax_table
         taxtable = TaxTable(raw = df)
-        cleaned = taxtable.table
+        table = taxtable.table
 
         # test types
-        assert cleaned['min'].dtype == np.floating
-        assert cleaned['max'].dtype  == np.floating
-        assert cleaned['rate'].dtype  == np.floating
+        assert table['min'].dtype == np.float64
+        assert table['max'].dtype  == np.float64
+        assert table['rate'].dtype  == np.float64
 
         # test inf conversion
-        assert np.isinf(cleaned['max'].values).any()
+        assert np.isinf(table['max'].values).any()
+
+        # test bracket tax
+
+        assert table['bracket_tax'][1] ==(45000 - 18201) * 0.19
+        assert table['cumsum'][2] == 18200 + 45000 + 120000
+
+        # test cumsum
+
 
 

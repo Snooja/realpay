@@ -46,6 +46,7 @@ class TaxTable:
 
     def __post_init__(self):
         self.table = self.clean_tax_table(self.raw)
+        self.table = self.prepare_table(self.table)
 
     def clean_tax_table(self, table:pd.DataFrame) -> pd.DataFrame:
         df = table.copy()
@@ -64,10 +65,25 @@ class TaxTable:
         )
         return(clean)
 
-    def _convert_inf_str(self, df) -> pd.DataFrame:
+    def _convert_inf_str(self, df:pd.DataFrame) -> pd.DataFrame:
         converted = df.copy()
         converted.replace(self.inf_str, np.inf)
         return(converted)
+
+    def prepare_table(self, df:pd.DataFrame) -> pd.DataFrame:
+        prepared = df.copy()
+        prepared['bracket_tax'] = self._calc_bracket_tax(df)
+        prepared['cumsum'] = self._calc_max_cumsum(df)
+        return(prepared)
+
+    def _calc_bracket_tax(self, df:pd.DataFrame) -> pd.DataFrame:
+        return ( (df[self.max_col] - df[self.min_col]) * df[self.rate_col])
+    
+    def _calc_max_cumsum(self, df:pd.DataFrame) -> pd.DataFrame:
+        return df[self.max_col].cumsum()
+
+
+
 
 
 
@@ -85,9 +101,6 @@ class Tax:
 
     def __post_init__(self):
         self.tax_table = self._prepare_tax_table(self.tax_table)
-
-    def prepare_tax_table(self):
-        pass
 
 
 @dataclass
