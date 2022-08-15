@@ -60,8 +60,7 @@ class TestTaxTable:
         )
     
     def test_clean_tax_table(self, raw_tax_table):
-        df = raw_tax_table
-        taxtable = TaxTable(raw = df)
+        taxtable = TaxTable(raw = raw_tax_table)
         table = taxtable.table
 
         # test types
@@ -73,11 +72,21 @@ class TestTaxTable:
         assert np.isinf(table['max'].values).any()
 
         # test bracket tax
-
         assert table['bracket_tax'][1] ==(45000 - 18201) * 0.19
-        assert table['cumsum'][2] == 18200 + 45000 + 120000
 
         # test cumsum
+        assert table['cumsum'][2] == 18200 + 45000 + 120000
+
+    def file_load_save(self, raw_tax_table):
+        taxtable = TaxTable(raw = raw_tax_table)
+        fp = "test_output_tax_table.csv"
+        taxtable.to_csv(fp)
+
+        taxtabl2 = TaxTable.from_csv(fp)
+
+        assert taxtable.raw.equals(taxtable2.raw)
+
+        
 
 
 

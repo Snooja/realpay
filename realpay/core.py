@@ -44,6 +44,12 @@ class TaxTable:
     rate_col:str = "rate"
     inf_str:str = 'inf' # what to interpret as infini
 
+    @classmethod
+    def from_csv(cls, fp):
+        df = pd.read_csv(fp)
+        return cls(raw = df)
+
+
     def __post_init__(self):
         self.table = self.clean_tax_table(self.raw)
         self.table = self.prepare_table(self.table)
@@ -81,6 +87,11 @@ class TaxTable:
     
     def _calc_max_cumsum(self, df:pd.DataFrame) -> pd.DataFrame:
         return df[self.max_col].cumsum()
+
+    def to_csv(self, fp):
+        """saves the raw tax table to csv
+        """
+        self.raw.to_csv(fp)
 
 
 
