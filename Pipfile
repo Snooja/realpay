@@ -8,6 +8,7 @@ pytest = "*"
 dataclasses = "*"
 pandas = "*"
 numpy = "*"
+pyyaml = "*"
 
 [dev-packages]
 ipykernel = "*"

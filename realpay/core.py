@@ -1,10 +1,11 @@
 #==================Setup===============#
 # Public Packages
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from typing import Optional
 from datetime import date
 import pandas as pd
 import numpy as np
+import json
 
 
 #==================Classes=============#
@@ -102,16 +103,37 @@ class TaxTable:
 class Tax:
     """Object capturing tax rate for a location
     """
-    levy:float = field(init=False)
+    levy:float  # flat levy
     valid_from: date # date rates valid from
     valid_to: date # date vrates valid until
     country: str # ISO Alpha-3 country code
     state: str # state code eg. WA for Western Australia
     currency:str
+    raw_tax_table: pd.DataFrame
     tax_table:TaxTable = field(init=False)
+    
+    @staticmethod
+    def _from_json(j):
+        d = json.loads(j)
+        d['raw_tax_table'] = pd.read_json(d['raw_tax_table'])
+        return(d)
+
+    @classmethod
+    def from_json(cls, j):
+        d = Tax._from_json(j)
+        return cls(**d)
 
     def __post_init__(self):
-        self.tax_table = self._prepare_tax_table(self.tax_table)
+        pass
+        self.tax_table = TaxTable(raw = self.raw_tax_table)
+
+    def to_json(self):
+        d = asdict(self)
+        del d['tax_table'] # processed data not needed for serialsiation
+        d['raw_tax_table'] = d['raw_tax_table'].to_json() # can't serialise dict with df inside
+        return json.dumps(d)
+    
+
 
 
 @dataclass
