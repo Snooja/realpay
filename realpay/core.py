@@ -113,25 +113,28 @@ class Tax:
     tax_table:TaxTable = field(init=False)
     
     @staticmethod
-    def _from_json(j):
-        d = json.loads(j)
+    def _from_json(fp):
+        f = open(fp, 'r')
+        d = json.loads(f.read())
+        f.close()
         d['raw_tax_table'] = pd.read_json(d['raw_tax_table'])
         return(d)
 
     @classmethod
-    def from_json(cls, j):
-        d = Tax._from_json(j)
+    def from_json(cls, fp):
+        d = Tax._from_json(fp)
         return cls(**d)
 
     def __post_init__(self):
         pass
         self.tax_table = TaxTable(raw = self.raw_tax_table)
 
-    def to_json(self):
+    def to_json(self, fp):
         d = asdict(self)
         del d['tax_table'] # processed data not needed for serialsiation
         d['raw_tax_table'] = d['raw_tax_table'].to_json() # can't serialise dict with df inside
-        return json.dumps(d)
+        with open(fp, 'w') as f:
+            json.dump(d, f, ensure_ascii=False)
     
 
 
