@@ -110,6 +110,7 @@ class Tax:
     state: str # state code eg. WA for Western Australia
     currency:str
     raw_tax_table: pd.DataFrame
+    reference: str # refernece to where you got the information eg. https://www.ato.gov.au/rates/individual-income-tax-rates/
     tax_table:TaxTable = field(init=False)
     
     @staticmethod
