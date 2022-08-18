@@ -38,7 +38,7 @@ class Salary:
 class TaxTable:
     """Class for a specific tax table
     """
-    raw:pd.DataFrame # raw tax table
+    raw:dict# raw tax table
     table:pd.DataFrame = field(init=False)
     min_col:str = 'min'
     max_col:str = 'max'
@@ -52,7 +52,8 @@ class TaxTable:
 
 
     def __post_init__(self):
-        self.table = self.clean_tax_table(self.raw)
+        self.table = pd.DataFrame(self.raw)
+        self.table = self.clean_tax_table(self.table)
         self.table = self.prepare_table(self.table)
 
     def clean_tax_table(self, table:pd.DataFrame) -> pd.DataFrame:
@@ -89,10 +90,6 @@ class TaxTable:
     def _calc_max_cumsum(self, df:pd.DataFrame) -> pd.DataFrame:
         return df[self.max_col].cumsum()
 
-    def to_csv(self, fp):
-        """saves the raw tax table to csv
-        """
-        self.raw.to_csv(fp)
 
 
 

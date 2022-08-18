@@ -51,13 +51,12 @@ class TestTaxTable:
 
     @pytest.fixture
     def raw_tax_table(self):
-        return pd.DataFrame(
-            {
-                'min': [0, 18201, 45001, 120001, 180001],
-                'max': [18200, 45000, 120000, 180000, 'inf'],
-                'rate': [0, 0.19, 0.325, 0.37, 0.45]
-            }
-        )
+        return {
+            'min': [0, 18201, 45001, 120001, 180001],
+            'max': [18200, 45000, 120000, 180000, 'inf'],
+            'rate': [0, 0.19, 0.325, 0.37, 0.45]
+        }
+        
     
     def test_clean_tax_table(self, raw_tax_table):
         taxtable = TaxTable(raw = raw_tax_table)
