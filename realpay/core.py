@@ -3,6 +3,7 @@
 from dataclasses import dataclass, field, asdict
 from typing import Optional
 from datetime import date
+from typing import Union, List
 import pandas as pd
 import numpy as np
 import json
@@ -104,9 +105,9 @@ class Tax:
     valid_from: date # date rates valid from
     valid_to: date # date vrates valid until
     country: str # ISO Alpha-3 country code
-    state: str # state code eg. WA for Western Australia
+    state: Union[str, List[str]] # state code eg. WA for Western Australia
     currency:str
-    raw_tax_table: pd.DataFrame
+    raw_tax_table: dict
     reference: str # refernece to where you got the information eg. https://www.ato.gov.au/rates/individual-income-tax-rates/
     tax_table:TaxTable = field(init=False)
     
@@ -115,7 +116,6 @@ class Tax:
         f = open(fp, 'r')
         d = json.loads(f.read())
         f.close()
-        d['raw_tax_table'] = pd.read_json(d['raw_tax_table'])
         return(d)
 
     @classmethod
@@ -127,10 +127,15 @@ class Tax:
         pass
         self.tax_table = TaxTable(raw = self.raw_tax_table)
 
-    def to_json(self, fp):
+    def to_json(self, fp = None):
+        if fp is None:
+            if isinstance(self.state,str):
+                fp = "_".join([self.country, self.state, self.valid_from, self.valid_to])
+            else:
+                fp = "_".join([self.country, self.valid_from, self.valid_to])
+            fp += ".json"
         d = asdict(self)
-        del d['tax_table'] # processed data not needed for serialsiation
-        d['raw_tax_table'] = d['raw_tax_table'].to_json() # can't serialise dict with df inside
+        del d['tax_table']
         with open(fp, 'w') as f:
             json.dump(d, f, ensure_ascii=False)
     

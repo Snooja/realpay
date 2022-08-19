@@ -1,0 +1,40 @@
+{
+    "levy": 0.02,
+    "valid_from": "2022-07-01",
+    "valid_to": "2022-06-30",
+    "country": "AUD",
+    "state": [
+        "WA",
+        "NT",
+        "NSW",
+        "VIC",
+        "SA",
+        "TAS",
+        "QLD"
+    ],
+    "currency": "AUD",
+    "raw_tax_table": {
+        "min": [
+            0,
+            18201,
+            45001,
+            120001,
+            180001
+        ],
+        "max": [
+            18200,
+            45000,
+            120000,
+            180000,
+            "inf"
+        ],
+        "rate": [
+            0,
+            0.19,
+            0.325,
+            0.37,
+            0.45
+        ]
+    },
+    "reference": "https://www.ato.gov.au/rates/individual-income-tax-rates/"
+}
