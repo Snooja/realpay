@@ -1,0 +1,59 @@
+{
+    "levy": 0.00,
+    "valid_from": "2017-01-01",
+    "valid_to": "2023-12-30",
+    "country": "SG",
+    "state": [
+    ],
+    "currency": "SGD",
+    "raw_tax_table": {
+        "min": [
+            000,
+            20000,
+            30000,
+            40000,
+            80000,
+            120000,
+            160000,
+            200000,
+            240000,
+            280000,
+            320000,
+            500000,
+            1000000
+            
+        ],
+        "max": [
+            20000,
+            30000,
+            40000,
+            80000,
+            120000,
+            160000,
+            200000,
+            240000,
+            280000,
+            320000,
+            500000,
+            1000000,
+            "inf"
+
+        ],
+        "rate": [
+            0.00,
+            0.02,
+            0.04,
+            0.07,
+            0.12,
+            0.15,
+            0.18,
+            0.19,
+            0.20,
+            0.20,
+            0.22,
+            0.23,
+            0.24
+        ]
+    },
+    "reference": "https://www.iras.gov.sg/taxes/individual-income-tax/basics-of-individual-income-tax/tax-residency-and-tax-rates/individual-income-tax-rates"
+}
