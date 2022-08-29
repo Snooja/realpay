@@ -1,0 +1,33 @@
+{
+    "levy": 0.00,
+    "valid_from": "2022-04-01",
+    "valid_to": "2023-03-30",
+    "country": "NZ",
+    "state": [
+    ],
+    "currency": "NZD",
+    "raw_tax_table": {
+        "min": [
+            0,
+            14001,
+            48001,
+            70001,
+            180001
+        ],
+        "max": [
+            14000,
+            48000,
+            70000,
+            180000,
+            "inf"
+        ],
+        "rate": [
+            0.105,
+            0.175,
+            0.30,
+            0.33,
+            0.39
+        ]
+    },
+    "reference": "https://taxsummaries.pwc.com/new-zealand/individual/taxes-on-personal-income"
+}
