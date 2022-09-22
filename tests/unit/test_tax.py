@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 # Internal Imports
-from realpay.core import Salary, TaxTable
+from realpay.tax import Salary, TaxTable
 
 #==================Tests===============#
 class TestSalary:
