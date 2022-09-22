@@ -27,6 +27,9 @@ class TestCPI:
         test = CPI.from_csv(cpi_csv)
         print(test.raw)
         
+    def test_loads_default(self):
+        test = CPI()
+        print(test.raw)
 
         
 
