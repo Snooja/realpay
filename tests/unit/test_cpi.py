@@ -22,6 +22,30 @@ def cpi_csv(tmp_path_factory, cpi_df):
     cpi_df.to_csv(fp, header=True,index=False)
     return fp
 
+
+@pytest.mark.parametrize(
+    "input,expected",
+    [
+        ("city,CT,country", ("city","CT","country")),
+        ("New York,  NY, United States", ("New York","NY","United States"))
+        ]
+)
+def test_cpi_parse_valid_city(input, expected):
+    city, citycode, country = CPI.parse_city(input)
+    assert (city, citycode, country) == (expected)
+
+@pytest.mark.parametrize(
+    "input",
+    [
+        "a",
+        "a, b, c, d",
+        ""
+    ],
+    ids = ['invalid single', 'invalid four items', 'invalid empty str']
+)
+def test_cpi_raises_parse_invalid_city(input):
+    with pytest.raises(Exception):
+        CPI.parse_city(input)
 class TestCPI:
     def test_from_csv(self, cpi_csv):
         test = CPI.from_csv(cpi_csv)
@@ -30,6 +54,9 @@ class TestCPI:
     def test_loads_default(self):
         test = CPI()
         print(test.raw)
+    
+
+
 
         
 
